@@ -12,28 +12,22 @@ node {
 }
 
 //declare a build task
-task build
+task mybuild
 
 //declare a task to create a zip of the app
+ 
+apply plugin: 'java'
 
-task zip(type: Zip) {
-    archiveFileName = "trainSchedule.zip"
-    destinationDirectory = layout.buildDirectory.dir('dist')
+task ZIPBUILD(type: Zip){
+     from"/home/cloud_user/CICD_Jenkins_Pipeline_SampleProject"
+     destinationDirectory = file("/home/cloud_user")
+     archiveFileName = "MyGradle.zip"
+} 
 
-    from layout.buildDirectory.dir('.') {
-		include "*"
-		include "bin/**"
-		include "data/**"
-		include "node_modules/**"
-		include "public/**"
-		include "routes/**"
-		include "views/**"
-	}
-}
 
 //declare task dependencies
-build.dependsOn zip
-zip.dependsOn npm_build
+
+build.dependsOn ZIPBUILD
 npm_build.dependsOn npm_test
 npm_test.dependsOn npmInstall
 npm_build.dependsOn npmInstall
